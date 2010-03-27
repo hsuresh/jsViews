@@ -1,0 +1,71 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+	"http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en" lang="en">
+<head>
+	<meta http-equiv="Content-Type" content="text/html; charset=utf-8"/>
+	<title>Custom chain examples</title>
+	<script type="text/javascript" src="jquery-1.3.2.js"></script>
+	<script type="text/javascript" src="chain.js"></script>
+</head>
+<body>
+	<div class="section intro">
+		<h2>Custom chain - Intro</h2>
+		<p>Custom chain is a jquery plugin to bind/render json to your views. It works on conventions.</p>
+		<p>Custom chain iterates over all the properties of the json, looks for a matching class on the parent element(s) on which the binding is made, and renders the property. It understands hyperlinks, input elements, drop downs - for hyperlinks, it binds to the attribute "href" and the text, in case of input elements, it sets the value attribute to the property, etc. In case of all other elements, it sets the value to the innerHTML of that element</p>
+		<div style="background:lightblue" class="contact">
+			<label>Name: </label><span class="name">Name</span><br/>
+			<label>Role: </label><input type="text" class="team"><br/>
+			<label>Team: </label><select class="role">
+				<option value="">--</option>
+				<option value="Batsman">Batsman</option>
+				<option value="Bowler">Bowler</option>
+				<option value="Allrounder">Allrounder</option>
+				</select><br/>
+			<label>Email: </label><a href="#" class="email">Email</a><br/>
+		</div>
+		<input type="button" value="Bind" class="bind"/><br/>
+		<script type="text/javascript">
+			$(".intro input.bind").click(function(){
+				$(".intro > .contact").item({"name" : "Kallis", "role" : "Allrounder", "team" : "Bangalore Royal Challengers", "email" : "kallis@rcb.com"}).chain();
+			});
+		</script>
+	</div>
+	
+	<div class="section nested" id="nested">
+		<h4>Nested elements</h4>
+		<p>All elements that bind to a nested json object, needs to have an additional class called "parent". In the following example, team is a nested json object, and so is the owner property.</p>
+		<div style="background:lightblue" class="team parent">
+			<label>Name: </label><span class="name">Name</span><br/>
+			<span class="owner parent"><label>Owner: </label> <label class="ownername"></label><br/><label class="bio"></label></span><br/></div>
+		<input type="button" value="Bind" class="bind"/><br/>
+		<script type="text/javascript">
+			$(".nested input.bind").click(function(){
+				$("#nested").item(
+					{"team" : {"name" : "RCB", "owner" : {"ownername" : "Vijay Mallaya", "bio": "Industrialist"}}}).chain();
+			});
+		</script>
+
+	</div>
+
+	<div class="section array">
+		<h4>Arrays</h4>
+		<p>If the json contains arrays, the markup should be similar to the nested objects, in that it contains a "parent" class. Also, in addition to this, the child should have an element with class "item", which would be hidden. Each element in the array is bound to a cloned copy of this item element, and then appended to the dom.</p>
+		<div style="background:lightblue" class="team parent">
+			<label>Name: </label><span class="name">Name</span><br/>
+			<span class="owners parent">
+				<div class="item" style="display:none">
+					<label>Owner: </label> <label class="ownername" id="owner"></label><br/><label class="bio"></label>
+				</div>
+			</span><br/>
+		<input type="button" value="Bind" class="bind"/><br/>
+		<script type="text/javascript">
+			$(".array input.bind").click(function(){
+				$(".array").item(
+						{"team" : {"name" : "KKR", "owners" : [{"ownername" : "Shah rukh", "bio": "Cine star"}, {"ownername" : "Juhi", "bio": "Cine star"}]}}).chain();
+			});
+		</script>
+
+	</div>
+</body>
+</html>
