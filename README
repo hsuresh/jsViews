@@ -1,0 +1,34 @@
+h2. jsViews - Intro
+
+	jsViews is a jquery plugin to render json/javascript objects to your views. It works on conventions.
+jsViews iterates over all the properties of the json, looks for a matching class on the parent element(s) on which the binding is made, and renders the property. It understands hyperlinks, input elements, drop downs - for hyperlinks, it binds to the attribute "href" and the text, in case of input elements, it sets the value attribute to the property, etc. In case of all other elements, it sets the value to the innerHTML of that element. Following is a snippet to render a template. 
+
+
+			$(".intro input.bind").click(function(){
+				$(".intro > .contact").item({"name" : "Kallis", "role" : "Allrounder", "team" : "Bangalore Royal Challengers", "email" : "kallis@rcb.com"}).chain();
+			});
+		
+
+h4. Nested elements
+
+All elements that bind to a nested json object, needs to have an additional class called "parent". In the following example, team is a nested json object, and so is the owner property.	
+
+h4. Arrays
+
+If the json contains arrays, the markup should be similar to the nested objects, in that it contains a "parent" class. Also, in addition to this, the child should have an element with class "item", which would be hidden. Each element in the array is bound to a cloned copy of this item element, and then appended to the dom.
+
+h4. Custom Rendering
+
+jsViews supports custom ways of rendering select properties, you can do this by passing a callback function to the chain method. Your callback will then have to handler rendering the property. In the following example, the callback handles rendering the name of the player.
+
+
+$(".intro input.bind").click(function(){
+	$(".intro > .contact").item({"name" : "Kallis", "role" : "Allrounder", "team" : "Bangalore Royal Challengers", "email" : "kallis@rcb.com"}).chain({"name" : function(ele, val) {ele.find(".name").flash(val);}});
+});
+
+
+Take a look at the intro.html for working examples.
+
+h4. Coming up
+
+	Right now, you need to mention parent class to nested as well as array elements, this is unnecessary, will fix it soon.
